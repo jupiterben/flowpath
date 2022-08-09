@@ -1,3 +1,6 @@
+import { makeAutoObservable } from 'mobx';
+import FPNode from './FPNode';
+
 type ResourceID = string;
 type NodeID = string;
 
@@ -11,7 +14,7 @@ interface FlowResource {
 }
 
 //流程节点内部数据
-interface FlowNodeLayoutData{
+interface FlowNodeLayoutData {
     x: number;
     y: number;
     width: number;
@@ -38,16 +41,39 @@ interface FlowPathData {
 }
 
 //流程节点
-class FlowProcessNode {
+class FlowProcessNode extends FPNode {
     private _data: FlowProcessNodeData;
     constructor(data: FlowProcessNodeData) {
+        super();
         this._data = data;
     }
 }
 
-class FlowPath {
-    private _data: FlowPathData;
-    constructor(data: FlowPathData) {
-        this._data = data;
+export class Stage {
+
+}
+export class FlowPath {
+    stage: Stage = new Stage();
+    nodes: FlowProcessNode[] = [];
+    constructor() {
+        makeAutoObservable(this);
+    }
+    createNode() {
+        var newNode = new FlowProcessNode({
+            version: 1,
+            uid: '123',
+            name: 'node1',
+            desc: 'node1 desc',
+            assignedTo: [],
+            inputs: [],
+            outputs: [],
+            layout: {
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0,
+            }
+        });
+        this.nodes.push(newNode);
     }
 }

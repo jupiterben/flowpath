@@ -1,11 +1,13 @@
 import React from "react";
-import StageVM from '../../ViewModel/FPStageVM';
-import * as styles from "./Stage.css";
+import StageVM from '~ViewModel/FPStageVM';
+import * as styles from "./stage.module.css";
+import { observer } from "mobx-react-lite";
+
 interface Prop {
     vm: StageVM;
     children: React.ReactNode;
 }
-const Stage = ({ vm, children }: Prop) => {
+const FPStageView = ({ vm, children }: Prop) => {
     var scale = vm.scale;
     var translate = vm.translate;
     return (
@@ -19,4 +21,4 @@ const Stage = ({ vm, children }: Prop) => {
     )
 }
 
-export default Stage;
+export default observer(FPStageView);
