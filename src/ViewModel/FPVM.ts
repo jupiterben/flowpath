@@ -19,10 +19,10 @@ export default class FPVM {
 
     get nodeVMs() {
         return this.model.nodes.map(n => {
-            if (!this._nodeVMMap.has(n.id)) {
-                this._nodeVMMap.set(n.id, new FPNodeVM(n));
+            if (!this._nodeVMMap.has(n.uid)) {
+                this._nodeVMMap.set(n.uid, new FPNodeVM(n));
             }
-            return this._nodeVMMap.get(n.id);
+            return this._nodeVMMap.get(n.uid);
         });
     }
 }

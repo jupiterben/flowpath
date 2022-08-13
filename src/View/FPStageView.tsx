@@ -1,6 +1,6 @@
 import React from "react";
 import StageVM from '~ViewModel/FPStageVM';
-import * as styles from "./stage.module.css";
+import * as styles from "./FPStage.module.css";
 import { observer } from "mobx-react-lite";
 
 interface Prop {

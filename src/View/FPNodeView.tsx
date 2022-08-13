@@ -1,5 +1,5 @@
 import React from "react";
-import * as styles from "./node.module.css";
+import * as styles from "./FPNode.module.css";
 import { observer } from "mobx-react-lite";
 import FPNodeVM from '~ViewModel/FPNodeVM';
 
