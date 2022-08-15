@@ -1,66 +1,63 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import styles from "./IoPorts.module.less";
-import FPNodeVM from '~ViewModel/FPNodeVM';
-import { FPResource } from '~Model/FPNode';
+import { IOPortVM } from "~ViewModel/FPNodeVM";
 
-interface Prop {
-    inputs : FPResource,
-    outputs,
+interface IOPortsProp {
+    inputs: IOPortVM[];
+    outputs: IOPortVM[];
+    nodeId: string;
 }
-const IoPorts = ({ inputs, outputs }: Prop) => {
-    
+const IoPortsView = ({ inputs, outputs, nodeId }: IOPortsProp) => {
     return (
         <div className={styles.wrapper} data-flume-component="ports">
             {inputs.length ? (
-                <div className={styles.inputs} data-flume-component="ports-inputs">
-                    {inputs.map(input => (
-                        <Input
-                            nodeId={nodeId}
-                            key={input.uid}
-                        />
+                <div
+                    className={styles.inputs}
+                    data-flume-component="ports-inputs"
+                >
+                    {inputs.map((input) => (
+                        <Input nodeId={nodeId} key={input.uid} name={input.name} color={input.color} label={input.label} />
                     ))}
                 </div>
             ) : null}
-            {!!resolvedOutputs.length && (
-                <div className={styles.outputs} data-flume-component="ports-outputs">
-                    {
-                        resolvedOutputs.map(output => (
-                            <Output
-                                {...output}
-                                nodeId={nodeId}
-                                key={output.uid}
-                            />
-                        ))}
+            {!!outputs.length && (
+                <div
+                    className={styles.outputs}
+                    data-flume-component="ports-outputs"
+                >
+                    {outputs.map((output) => (
+                        <Output nodeId={nodeId} key={output.uid} name={output.name} color={output.color} label={output.label}/>
+                    ))}
                 </div>
             )}
         </div>
     );
-}
+};
 
-export default observer(IoPorts);
+export default observer(IoPortsView);
 
 interface InputProp {
     label: string;
-    type: string;
     name: string;
     nodeId: string;
     color: string;
 }
-const Input = ({ label, type, name, nodeId, color }: InputProp) => {
+const Input = ({ label, name, nodeId, color }: InputProp) => {
     const hidePort = false;
     const defaultLabel = "Input";
-    const triggerRecalculation = () => { };
+    const triggerRecalculation = () => {};
     return (
-        <div data-flume-component="port-input"
+        <div
+            data-flume-component="port-input"
             className={styles.transput}
-            onDragStart={e => {
+            onDragStart={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-            }}>
+            }}
+        >
             {!hidePort ? (
-                <Port
-                    type={type}
+                <Port                   
                     color={color}
                     name={name}
                     nodeId={nodeId}
@@ -68,33 +65,42 @@ const Input = ({ label, type, name, nodeId, color }: InputProp) => {
                     triggerRecalculation={triggerRecalculation}
                 />
             ) : null}
-            <label data-flume-component="port-label" className={styles.portLabel}>{label || defaultLabel}</label>
+            <label
+                data-flume-component="port-label"
+                className={styles.portLabel}
+            >
+                {label || defaultLabel}
+            </label>
         </div>
-    )
-}
-
+    );
+};
 
 interface OutputProp {
     label: string;
-    type: string;
     name: string;
     nodeId: string;
     color: string;
 }
-const Output = ({ label, type, name, nodeId, color }: OutputProp) => {
+const Output = ({ label, name, nodeId, color }: OutputProp) => {
     const defaultLabel = "Output";
-    const triggerRecalculation = () => { };
+    const triggerRecalculation = () => {};
     return (
-        <div data-flume-component="port-output"
+        <div
+            data-flume-component="port-output"
             className={styles.transput}
             data-controlless={true}
-            onDragStart={e => {
+            onDragStart={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
             }}
         >
-            <label data-flume-component="port-label" className={styles.portLabel}>{label || defaultLabel}</label>
-            <Port type={type}
+            <label
+                data-flume-component="port-label"
+                className={styles.portLabel}
+            >
+                {label || defaultLabel}
+            </label>
+            <Port
                 name={name}
                 color={color}
                 nodeId={nodeId}
@@ -102,36 +108,35 @@ const Output = ({ label, type, name, nodeId, color }: OutputProp) => {
                 triggerRecalculation={triggerRecalculation}
             />
         </div>
-    )
-}
+    );
+};
 
 interface PortProp {
     isInput: boolean;
-    type: string;
     name: string;
     nodeId: string;
     color: string;
     triggerRecalculation: () => void;
 }
-const Port = ({ isInput, type, nodeId, color, name }: PortProp) => {
+const Port = ({ isInput, nodeId, color, name }: PortProp) => {
     const port = React.useRef(null);
 
     return (
         <React.Fragment>
-            <div style={{ zIndex: 999 }}
+            <div
+                style={{ zIndex: 999 }}
                 className={styles.port}
                 data-port-color={color}
                 data-port-name={name}
-                data-port-type={type}
                 data-port-transput-type={isInput ? "input" : "output"}
                 data-node-id={nodeId}
                 data-flume-component="port-handle"
-                onDragStart={e => {
+                onDragStart={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                 }}
                 ref={port}
             />
         </React.Fragment>
-    )
-}
+    );
+};

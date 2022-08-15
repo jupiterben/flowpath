@@ -1,9 +1,9 @@
 import React from "react";
-import FPVM from '~ViewModel/FPVM';
-import FPStageView from './FPStageView';
+import FPVM from "~ViewModel/FPVM";
+import FPStageView from "./FPStageView";
 import { observer } from "mobx-react-lite";
-import FPNodeView from './FPNodeView';
-import FPNodeVM from '~ViewModel/FPNodeVM';
+import FPNodeView from "./FPNodeView";
+import { FPNodeVM } from "~ViewModel/FPNodeVM";
 
 interface Prop {
     vm: FPVM;
@@ -11,16 +11,14 @@ interface Prop {
 const FPView = ({ vm }: Prop) => {
     return (
         <div style={{ height: vm.height }}>
-            <FPStageView vm={vm.stageVM} >
+            <FPStageView vm={vm.stageVM}>
                 <h2>{vm.nodeVMs.length}</h2>
-                {
-                    vm.nodeVMs.map((nodeVM: FPNodeVM) => (
-                        <FPNodeView vm={nodeVM} key={nodeVM.uid} />
-                    ))
-                }
+                {vm.nodeVMs.map((nodeVM: FPNodeVM) => (
+                    <FPNodeView vm={nodeVM} key={nodeVM.uid} />
+                ))}
             </FPStageView>
         </div>
-    )
-}
+    );
+};
 
 export default observer(FPView);

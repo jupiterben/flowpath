@@ -16,6 +16,7 @@ class App {
         const container = document.getElementById("root");
         const root = createRoot(container!);
         root.render(<FPView vm={this.vm} />);
+        
         setInterval(() => {
             this.model.createNode();
         },1000);

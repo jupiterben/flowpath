@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { FlowPath } from '~Model/FlowPath';
-import FPNodeVM from './FPNodeVM';
+import { FPNodeVM } from './FPNodeVM';
 import FPStageVM from './FPStageVM';
 
 export default class FPVM {
