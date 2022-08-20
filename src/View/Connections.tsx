@@ -1,8 +1,8 @@
 import styles from "./Connections.css";
 import React from "react";
-import { calculateCurve, Point2d } from "~ViewModel/ConnectionVM";
+import { calculateCurve } from "~ViewModel/ConnectionVM";
 
-export const Connections = ({}) => {
+export const ConnectionsView = ({}) => {
     return <div className={styles.svgWrapper} />;
 };
 
@@ -17,7 +17,7 @@ interface ConnectionProp {
     inputPortName: string;
 }
 
-export const Connection = ({
+export const ConnectionView = ({
     from,
     to,
     id,

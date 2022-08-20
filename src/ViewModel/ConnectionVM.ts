@@ -1,8 +1,5 @@
 import { line, curveBasis } from "d3-shape";
-export interface Point2d {
-    x: number;
-    y: number;
-}
+import { IOPortVM } from './FPNodeVM';
 
 export const calculateCurve = (from: Point2d, to: Point2d) => {
     const length = to.x - from.x;
@@ -15,3 +12,13 @@ export const calculateCurve = (from: Point2d, to: Point2d) => {
     ]);
     return curve;
 };
+
+export class ConnectionVM {
+    from?: IOPortVM | Point2d;
+    to?: IOPortVM | Point2d;
+    constructor(from?: IOPortVM | Point2d, to?: IOPortVM | Point2d) {
+        this.from = from;
+        this.to = to;
+    }
+
+}

@@ -2,8 +2,8 @@ import React from "react";
 import * as styles from "./FPNode.module.css";
 import { observer } from "mobx-react-lite";
 import { FPNodeVM } from "~ViewModel/FPNodeVM";
-import IoPortView from "./IoPortsView";
-import Draggable from "react-draggable";
+import IoPortsView from "./IoPortsView";
+import Draggable from './Draggable';
 
 interface Prop {
     vm: FPNodeVM;
@@ -13,33 +13,33 @@ const FPNodeView = ({ vm }: Prop) => {
     var x = vm.x;
     var y = vm.y;
     var label = vm.label;
+    const dragHandler = {
+        onDragging: vm.onDragging,
+        onDragStart: vm.onDragStart,
+        onDragEnd: vm.onDragEnd
+    };
+
     return (
-        <Draggable>
-            <div
-                className={styles.wrapper}
-                style={{ width, transform: `translate(${x}px, ${y}px)` }}
-            >
-                <NodeHeader>{label}</NodeHeader>
-                <IoPortView
-                    nodeId={vm.uid}
-                    inputs={vm.inputs}
-                    outputs={vm.outputs}
-                />
-            </div>
-        </Draggable>
+        <Draggable className={styles.wrapper}
+            style={{ width, transform: `translate(${x}px, ${y}px)` }}
+            dragHandler={dragHandler}
+        >
+            <NodeHeader>{label}</NodeHeader>
+            <IoPortsView
+                nodeId={vm.uid}
+                inputs={vm.inputs}
+                outputs={vm.outputs}
+            />
+        </Draggable >
     );
 };
+export default observer(FPNodeView);
 
-interface HeaderProp {
-    children: React.ReactNode;
-    className?: string;
-}
-const NodeHeader = ({ children, className = "", ...props }: HeaderProp) => (
+const NodeHeader = ({ children, className, ...props }: React.ComponentProps<'h2'>) => (
     <h2
         {...props}
         className={styles.label + (className ? ` ${className}` : "")}
     >
         {children}
     </h2>
-);
-export default observer(FPNodeView);
+)

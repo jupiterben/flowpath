@@ -12,7 +12,6 @@ const FPView = ({ vm }: Prop) => {
     return (
         <div style={{ height: vm.height }}>
             <FPStageView vm={vm.stageVM}>
-                <h2>{vm.nodeVMs.length}</h2>
                 {vm.nodeVMs.map((nodeVM: FPNodeVM) => (
                     <FPNodeView vm={nodeVM} key={nodeVM.uid} />
                 ))}

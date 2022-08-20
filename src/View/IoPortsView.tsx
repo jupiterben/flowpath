@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import styles from "./IoPorts.module.less";
+import * as styles from "./IoPorts.module.less";
 import { IOPortVM } from "~ViewModel/FPNodeVM";
 
 interface IOPortsProp {

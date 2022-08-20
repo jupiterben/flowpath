@@ -4,9 +4,11 @@ import { FPProcessNode, IOPort, IOPortType } from "../Model/FPNode";
 export class IOPortVM {
     model: IOPort;
     portType: IOPortType;
+    position?: Point2d;
     constructor(model: IOPort, portType: IOPortType) {
         this.model = model;
         this.portType = portType;
+        makeAutoObservable(this);
     }
     get uid() {
         return this.model.uid;
@@ -14,8 +16,8 @@ export class IOPortVM {
     get label() {
         return this.model.res?.meta.label || "";
     }
-    get name() { return this.label;}
-    get color() {  return this.portType == IOPortType.Input ? "red" : "blue"; }
+    get name() { return this.label; }
+    get color() { return this.portType == IOPortType.Input ? "red" : "blue"; }
 }
 
 export class FPNodeVM {
@@ -61,4 +63,17 @@ export class FPNodeVM {
             return this._outputsVMMap.get(item.uid)!;
         });
     }
+
+    dragStartPos?: Point2d;
+    onDragging = (mousePos: Point2d, offset?: Point2d) => {
+        this.x = offset!.x + this.dragStartPos!.x;
+        this.y = offset!.y + this.dragStartPos!.y;
+    }
+    onDragStart = (mousePos: Point2d, offset?: Point2d) => {
+        this.dragStartPos = { x: this.x, y: this.y };
+    }
+    onDragEnd = (mousePos: Point2d, offset?: Point2d) => {
+        this.dragStartPos = undefined;
+    }
+
 }
