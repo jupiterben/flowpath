@@ -1,4 +1,5 @@
 import { line, curveBasis } from "d3-shape";
+import { Point2d } from "~Model/FlowPath";
 import { IOPortVM } from './FPNodeVM';
 
 export const calculateCurve = (from: Point2d, to: Point2d) => {
@@ -14,9 +15,9 @@ export const calculateCurve = (from: Point2d, to: Point2d) => {
 };
 
 export class ConnectionVM {
-    from?: IOPortVM | Point2d;
+    from?: IOPortVM ;
     to?: IOPortVM | Point2d;
-    constructor(from?: IOPortVM | Point2d, to?: IOPortVM | Point2d) {
+    constructor(from?: IOPortVM , to?: IOPortVM | Point2d) {
         this.from = from;
         this.to = to;
     }

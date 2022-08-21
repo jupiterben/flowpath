@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { FPStage } from '~Model/FlowPath';
+import { FPStage, Point2d } from '~Model/FlowPath';
 
 export default class FPStageVM {
     model: FPStage;

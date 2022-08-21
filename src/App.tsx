@@ -1,16 +1,14 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import FPVM from './ViewModel/FPVM';
-import { FlowPath } from './Model/FlowPath';
+import FlowPathVM from './ViewModel/FlowPathVM';
+import { FlowPathDoc } from './Model/FlowPath';
 import FPView from './View/FPView';
 
 
 class App {
-    model: FlowPath;
-    vm: FPVM;
+    vm: FlowPathVM;
     constructor() {
-        this.model = new FlowPath();
-        this.vm = new FPVM(this.model);
+        this.vm = new FlowPathVM(new FlowPathDoc());
     }
     Render() {
         const container = document.getElementById("root");
@@ -18,7 +16,7 @@ class App {
         root.render(<FPView vm={this.vm} />);
         
         setInterval(() => {
-            this.model.createNode();
+            this.vm.createNode();
         },1000);
     }
 }

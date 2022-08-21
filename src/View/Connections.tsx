@@ -1,6 +1,7 @@
 import styles from "./Connections.css";
 import React from "react";
 import { calculateCurve } from "~ViewModel/ConnectionVM";
+import { Point2d } from "~Model/FlowPath";
 
 export const ConnectionsView = ({}) => {
     return <div className={styles.svgWrapper} />;

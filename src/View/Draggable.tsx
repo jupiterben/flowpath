@@ -1,4 +1,5 @@
 import React, { TouchEvent, MouseEvent } from "react";
+import { Point2d } from "~Model/FlowPath";
 type MouseCallBack = (mousePos: Point2d, offset?: Point2d) => void;
 
 interface DraggableProp extends React.ComponentProps<'div'> {

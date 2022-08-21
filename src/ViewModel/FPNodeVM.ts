@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { Point2d } from "~Model/FlowPath";
 import { FPProcessNode, IOPort, IOPortType } from "../Model/FPNode";
 
 export class IOPortVM {
@@ -16,14 +17,20 @@ export class IOPortVM {
     get label() {
         return this.model.res?.meta.label || "";
     }
-    get name() { return this.label; }
-    get color() { return this.portType == IOPortType.Input ? "red" : "blue"; }
+    get name() {
+        return this.label;
+    }
+    get color() {
+        return this.portType == IOPortType.Input ? "red" : "blue";
+    }
 }
 
 export class FPNodeVM {
     model: FPProcessNode;
     constructor(model: FPProcessNode) {
         this.model = model;
+        this._refreshInputs();
+        this._refreshOutputs();
         makeAutoObservable(this);
     }
     width: number = 60;
@@ -34,6 +41,27 @@ export class FPNodeVM {
     _inputsVMMap = new Map<string, IOPortVM>();
     _outputsVMMap = new Map<string, IOPortVM>();
 
+    private _refreshInputs() {
+        let oldInputs = this._inputsVMMap;
+        this._inputsVMMap = this.model.inputs.reduce((ret, item) => {
+            let vm = oldInputs.get(item.uid);
+            if (!vm) {
+                vm = new IOPortVM(item, IOPortType.Input);
+            }
+            return ret.set(item.uid, vm);
+        }, new Map<string, IOPortVM>());
+    }
+    private _refreshOutputs() {
+        let oldOutputs = this._outputsVMMap;
+        this._outputsVMMap = this.model.outputs.reduce((ret, item) => {
+            let vm = oldOutputs.get(item.uid);
+            if (!vm) {
+                vm = new IOPortVM(item, IOPortType.Output);
+            }
+            return ret.set(item.uid, vm);
+        }, new Map<string, IOPortVM>());
+    }
+
     get label() {
         return this.model.name;
     }
@@ -42,38 +70,21 @@ export class FPNodeVM {
         return this.model.uid;
     }
     get inputs() {
-        return this.model.inputs.map((item) => {
-            if (!this._inputsVMMap.has(item.uid)) {
-                this._inputsVMMap.set(
-                    item.uid,
-                    new IOPortVM(item, IOPortType.Input)
-                );
-            }
-            return this._inputsVMMap.get(item.uid)!;
-        });
+        return Array.from(this._inputsVMMap.values());
     }
     get outputs() {
-        return this.model.outputs.map((item) => {
-            if (!this._outputsVMMap.has(item.uid)) {
-                this._outputsVMMap.set(
-                    item.uid,
-                    new IOPortVM(item, IOPortType.Output)
-                );
-            }
-            return this._outputsVMMap.get(item.uid)!;
-        });
+        return Array.from(this._outputsVMMap.values());
     }
 
     dragStartPos?: Point2d;
     onDragging = (mousePos: Point2d, offset?: Point2d) => {
         this.x = offset!.x + this.dragStartPos!.x;
         this.y = offset!.y + this.dragStartPos!.y;
-    }
+    };
     onDragStart = (mousePos: Point2d, offset?: Point2d) => {
         this.dragStartPos = { x: this.x, y: this.y };
-    }
+    };
     onDragEnd = (mousePos: Point2d, offset?: Point2d) => {
         this.dragStartPos = undefined;
-    }
-
+    };
 }
