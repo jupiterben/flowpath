@@ -1,4 +1,3 @@
-import { makeAutoObservable } from "mobx";
 import { v4 } from "uuid";
 
 export class FPResource {
@@ -27,6 +26,5 @@ export class FPProcessNode {
     constructor() {
         this.inputs.push(new IOPort());
         this.outputs.push(new IOPort());
-        makeAutoObservable(this);
     }
 }

@@ -2,42 +2,34 @@ import { makeAutoObservable } from 'mobx';
 import { FPStage, Point2d } from '~Model/FlowPath';
 
 export default class FPStageVM {
-    model: FPStage;
-    translate: Point2d;
+    scale = 1;
+    center: Point2d = { x: 0, y: 0 };
 
-    constructor(model: FPStage) {
-        this.model = model;
-        this.translate = this._calTranslate();
+    constructor() {
         makeAutoObservable(this);
     }
 
-    //model to px
-    get scale() {
-        return this.model.scale;
+    update(model: FPStage) {
+        const { x, y } = model.center;
+        this.center = { x, y };
     }
-    get center() {
-        return this.model.center;
-    }
-    set center(value: Point2d) {
-        this.model.center = value;
-    }
-    _calTranslate() {
+
+    get translate() {
         return { x: this.center.x * this.scale, y: this.center.y * this.scale };
     }
 
-    oldCenter?: Point2d;
+    startCenter?: Point2d;
     onDragging = (mousePos: Point2d, offset?: Point2d) => {
-        if (!this.oldCenter || !offset) return;
+        if (!this.startCenter || !offset) return;
         let offsetX = -offset.x / this.scale;
         let offsetY = -offset.y / this.scale;
-        this.center = { x: offsetX + this.oldCenter.x, y: offsetY + this.oldCenter.y };
-        this.translate = this._calTranslate();
+        this.center = { x: offsetX + this.startCenter.x, y: offsetY + this.startCenter.y };
     }
     onDragStart = (mousePos: Point2d, offset?: Point2d) => {
-        this.oldCenter = this.center;
+        this.startCenter = this.center;
     }
     onDragEnd = (mousePos: Point2d, offset?: Point2d) => {
-        this.oldCenter = undefined;
+        this.startCenter = undefined;
     }
 
 }

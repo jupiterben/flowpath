@@ -1,27 +1,25 @@
-import * as React from "react";
-import { createRoot } from "react-dom/client";
 import FlowPathVM from './ViewModel/FlowPathVM';
 import { FlowPathDoc } from './Model/FlowPath';
-import FPView from './View/FPView';
+import { FlowPathView } from './View/FPView';
 
+declare global {
+    var app: App;
+}
 
 class App {
     vm: FlowPathVM;
+    doc: FlowPathDoc;
+    view: FlowPathView;
     constructor() {
-        this.vm = new FlowPathVM(new FlowPathDoc());
+        this.doc = new FlowPathDoc();
+        this.vm = new FlowPathVM(this.doc);
+        this.view = new FlowPathView(this.vm);
     }
-    Render() {
-        const container = document.getElementById("root");
-        const root = createRoot(container!);
-        root.render(<FPView vm={this.vm} />);
-        
-        setInterval(() => {
-            this.vm.createNode();
-        },1000);
+    start() {
+        this.view.Render();
     }
 }
 
-var app = new App();
-app.Render();
-
+globalThis.app = new App();
+globalThis.app.start();
 export default app;

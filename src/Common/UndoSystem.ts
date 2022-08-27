@@ -1,28 +1,25 @@
+
+//git style undo redo 
 class Commit<T> {
-    readonly time: Date;
-    readonly pre?: Commit<T>;
-    readonly store: T;
-    readonly desc?: string;
-    constructor(store: T, pre?: Commit<T>, desc?: string) {
-        this.time = new Date();
-        this.store = store;
-        this.pre = pre;
+    readonly time: Date = new Date();
+    constructor(public store: T
+        , public pre?: Commit<T>
+        , public desc?: string) {
     }
 }
 
 class Branch<T> {
     head: Commit<T>;
-    name: string;
-    readonly time: Date;
-    constructor(name: string, head: Commit<T>) {
-        this.name = name;
-        this.head = head;
-        this.time = new Date();
+    from: Commit<T>;
+    readonly time: Date = new Date();
+    constructor(public name: string, commit: Commit<T>) {
+        this.from = commit;
+        this.head = commit;
     }
 }
 
 export class UndoSystem<T> {
-    private _branchs = new Array<Branch<T>>();
+    private _branches = new Array<Branch<T>>();
     private _currentBranch: Branch<T>;
     private _currentCommit: Commit<T>;
 
@@ -38,7 +35,7 @@ export class UndoSystem<T> {
     constructor(store: T) {
         let commit = new Commit(store, undefined, "init");
         this._currentBranch = new Branch("master", commit);
-        this._branchs.push(this._currentBranch);
+        this._branches.push(this._currentBranch);
         this._currentCommit = commit;
     }
 
@@ -77,17 +74,35 @@ export class UndoSystem<T> {
     }
 
     commit(store: T, desc?: string) {
-        if (this._currentCommit.store === store) return;
+        if (this._currentCommit.store === store) return false;
         let commit = new Commit(store, this._currentCommit, desc);
         this._currentCommit = commit;
         this.currentHead = commit;
+        return true;
     }
 
-    createBranch(name: string) {
+    private _createBranch(name: string) {
         const branch = new Branch(name, this.currentHead);
-        this._branchs.push(branch);
+        this._branches.push(branch);
         return branch;
     }
 
-    switchBranch(name: string) {}
+    findBranch(name: string) {
+        return this._branches.find(branch => branch.name === name);
+    }
+    createBranch(name: string) {
+        if (this.findBranch(name)) { return false; }
+        return this._createBranch(name);
+    }
+
+    switchToBranch(name: string, create: boolean) {
+        let branch = this.findBranch(name);
+        if (!branch && create) {
+            branch = this._createBranch(name);
+        }
+        if (!branch) return false;
+        this._currentBranch = branch;
+        this._currentCommit = branch!.head;
+        return true;
+    }
 }

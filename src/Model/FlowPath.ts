@@ -1,7 +1,6 @@
 import { FPProcessNode, FPResource } from "./FPNode";
-import { createDraft, Draft, finishDraft, immerable } from "immer";
-import { makeAutoObservable, makeObservable, observable } from "mobx";
-import { UndoSystem } from "./UndoSystem";
+import { immerable } from "immer";
+import { Store } from '../Common/Store';
 
 export interface Point2d {
     x: number;
@@ -14,7 +13,8 @@ export class FPStage {
     scale: number = 1;
 }
 
-export class FlowPathStore {
+
+export class FlowPath {
     [immerable] = true;
     stage: FPStage = new FPStage();
     nodes: FPProcessNode[] = [];
@@ -24,36 +24,11 @@ export class FlowPathStore {
     }
 }
 
-export class FlowPathDoc {
-    private _undoSys: UndoSystem<FlowPathStore>;
-    state: Draft<FlowPathStore>;
-
-    constructor() {
-        const store = new FlowPathStore();
-        this.state = createDraft(store);
-        this._undoSys = new UndoSystem(store);
-        makeObservable(this, {
-            state: observable,
+export class FlowPathDoc extends Store<FlowPath> {
+    constructor() { super(new FlowPath()) }
+    createNode() {
+        this.changeState(draft => {
+            draft.nodes.push(new FPProcessNode());
         });
-    }
-
-    commit(desc?: string) {
-        const store = finishDraft(this.state);
-        this._undoSys.commit(store, desc);
-        this.state = createDraft(store);
-        return this._undoSys.currentStore;
-    }
-
-    undo() {
-        if (this._undoSys.undo()) {
-            this.state = createDraft(this._undoSys.currentStore);
-        }
-        return this._undoSys.currentStore;
-    }
-    redo() {
-        if (this._undoSys.redo()) {
-            this.state = createDraft(this._undoSys.currentStore);
-        }
-        return this._undoSys.currentStore;
     }
 }
