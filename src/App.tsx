@@ -16,7 +16,7 @@ class App {
         this.view = new FlowPathView(this.vm);
     }
     start() {
-        this.view.Render();
+        this.view.render();
     }
 }
 

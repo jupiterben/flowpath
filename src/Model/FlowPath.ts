@@ -19,9 +19,6 @@ export class FlowPath {
     stage: FPStage = new FPStage();
     nodes: FPProcessNode[] = [];
     resources: FPResource[] = [];
-    createNode() {
-        this.nodes.push(new FPProcessNode());
-    }
 }
 
 export class FlowPathDoc extends Store<FlowPath> {

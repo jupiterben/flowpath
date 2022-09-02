@@ -18,9 +18,8 @@ const FPStageView = ({ vm, children }: Prop) => {
     };
     return (
         <Draggable className={styles.wrapper}
-            dragHandler={dragHandler}
-            style={{ transform: `translate(${-translate.x}px, ${-translate.y}px)` }}>
-            <div className={styles.transformWrapper}>
+            dragHandler={dragHandler}>
+            <div className={styles.transformWrapper} style={{ transform: `translate(${-translate.x}px, ${-translate.y}px)` }}>
                 <div className={styles.scaleWrapper} style={{ transform: `scale(${scale})` }}>
                     {children}
                 </div>
