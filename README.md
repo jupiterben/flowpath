@@ -1,4 +1,13 @@
-# Flow Path Node Eidtor
+# Flow Path Node Editor
 
-Managae work flow between workers
+Manage work flow between workers
 
+
+
+## Dependencies
+
+
+
+UI
+@playcanvas/observer
+@playcanvas/pcui

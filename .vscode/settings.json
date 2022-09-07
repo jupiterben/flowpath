@@ -4,6 +4,8 @@
         "FPVM",
         "immer",
         "immerable",
+        "Konva",
+        "playcanvas",
         "transput"
     ]
 }

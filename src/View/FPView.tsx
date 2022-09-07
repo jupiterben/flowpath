@@ -6,14 +6,24 @@ import FPStageView from "./FPStageView";
 import { observer } from "mobx-react-lite";
 import FPNodeView from "./FPNodeView";
 import { FPNodeVM } from "~ViewModel/FPNodeVM";
+import { useParentSize } from '@cutting/use-get-parent-size';
 
 interface Prop {
     vm: FlowPathVM;
 }
 const FPViewComponent = observer(({ vm }: Prop) => {
+    const fullscreen: any = {
+        position: "fixed",
+        top: "0px",
+        left: '0px',
+        bottom: '0px',
+        right: '0px'
+    };
+    const ref = React.useRef<HTMLDivElement>(null);
+    const { width, height } = useParentSize(ref, { debounceDelay: 1 });
     return (
-        <div style={{ height: vm.height }}>
-            <FPStageView vm={vm.stage!}>
+        <div ref={ref} style={fullscreen} >
+            <FPStageView vm={vm.stage!} {...{ width, height }}>
                 {vm.nodes.map((nodeVM: FPNodeVM) => (
                     <FPNodeView vm={nodeVM} key={nodeVM.uid} />
                 ))}
