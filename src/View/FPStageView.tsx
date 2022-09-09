@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import StageVM from '~ViewModel/FPStageVM';
 import { observer } from "mobx-react-lite";
 import Draggable from './Draggable';
-import { Stage, Layer, Rect, Text } from 'react-konva';
-import Konva from 'konva';
+import { Stage, Layer, Rect, Text, Image } from 'react-konva';
+import useImage from 'use-image';
 
 interface Prop extends React.ComponentProps<"div"> {
     vm: StageVM;
@@ -31,40 +31,50 @@ interface Prop extends React.ComponentProps<"div"> {
 //     )
 // }
 
-class ColoredRect extends React.Component {
-    state = {
-        color: 'green'
-    };
-    handleClick = () => {
-        this.setState({
-            color: Konva.Util.getRandomColor()
-        });
-    };
-    render() {
-        return (
-            <Rect
-                x={20}
-                y={20}
-                width={50}
-                height={50}
-                fill={this.state.color}
-                shadowBlur={5}
-                onClick={this.handleClick}
-            />
-        );
-    }
+interface Rect {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+interface GridProp {
+    minStrip: number;
+    maxStrip: number;
+    drawAxis: boolean;
 }
 
+const InfGrid = (viewport: Rect, gridProp: GridProp) => {
 
+}
+
+const URLImage = (props: any) => {
+    const [image, setImage] = useState<CanvasImageSource | undefined>(undefined);
+    useEffect(() => {
+        loadImage();
+    }, [props.src]);
+
+    function loadImage() {
+        const image = new window.Image();
+        image.src = props.src;
+        image.onload = () => {
+            setImage(image);
+        };
+    }
+    return (
+        <Image x={props.x} y={props.y} image={image} />
+    );
+}
 
 const FPStageView = ({ vm, children, width, height }: Prop) => {
+    const [image] = useImage("");
     return (
-        <Stage width={width} height={height}>
+        <Stage width={width} height={height} >
             <Layer>
-                <ColoredRect />
+                <URLImage src="" />
+                <Image image={image} y={100} />
             </Layer>
         </Stage>
-
     )
 }
 export default observer(FPStageView);
+
