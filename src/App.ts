@@ -1,6 +1,6 @@
-import FlowPathVM from './ViewModel/FlowPathVM';
-import { FlowPathDoc } from './Model/FlowPath';
-import { FlowPathView } from './View/FPView';
+import FlowPathVM from "./ViewModel/FlowPathVM";
+import { FlowPathDoc } from "./Model/FlowPath";
+import { FlowPathView } from "./View/FPView";
 
 declare global {
     var app: App;

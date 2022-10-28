@@ -1,6 +1,6 @@
 import { FPProcessNode, FPResource } from "./FPNode";
 import { immerable } from "immer";
-import { Store } from '../Common/Store';
+import { Store } from "../Common/Store";
 
 export interface Point2d {
     x: number;
@@ -13,7 +13,6 @@ export class FPStage {
     scale: number = 1;
 }
 
-
 export class FlowPath {
     [immerable] = true;
     stage: FPStage = new FPStage();
@@ -22,9 +21,11 @@ export class FlowPath {
 }
 
 export class FlowPathDoc extends Store<FlowPath> {
-    constructor() { super(new FlowPath()) }
+    constructor() {
+        super(new FlowPath());
+    }
     createNode() {
-        this.changeState(draft => {
+        this.changeState((draft) => {
             draft.nodes.push(new FPProcessNode());
         });
     }

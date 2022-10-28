@@ -1,11 +1,11 @@
-
-//git style undo redo 
+//git style undo redo
 class Commit<T> {
     readonly time: Date = new Date();
-    constructor(public store: T
-        , public pre?: Commit<T>
-        , public desc?: string) {
-    }
+    constructor(
+        public store: T,
+        public pre?: Commit<T>,
+        public desc?: string
+    ) {}
 }
 
 class Branch<T> {
@@ -88,10 +88,12 @@ export class UndoSystem<T> {
     }
 
     findBranch(name: string) {
-        return this._branches.find(branch => branch.name === name);
+        return this._branches.find((branch) => branch.name === name);
     }
     createBranch(name: string) {
-        if (this.findBranch(name)) { return false; }
+        if (this.findBranch(name)) {
+            return false;
+        }
         return this._createBranch(name);
     }
 
